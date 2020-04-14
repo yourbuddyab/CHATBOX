@@ -1,101 +1,118 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
+@section('content')
+<style>
+    /* HIDE RADIO */
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 
-        <title>Laravel</title>
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-            
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+/* onclick="form.submit()" STYLES */
+[type=radio]:checked + img {
+  outline: 2px solid #f00;
+}
+</style>
+<section class="jnr__call__to__action call__to__action--2 bg-image--7">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12">
+                <div class="jnr__call__action__wrap d-flex flex-wrap flex-md-nowrap flex-lg-nowrap justify-content-between align-items-center">
+                    <div class="callto__action__inner">
+                        <h2>Poll Voting</h2>
+                        <p>Vote and Fun with Family and Friend...........</p>
+                    </div>
+                    <div class="callto__action__btn">
+                        <a class="dcare__btn btn__org hover--theme" href="/poll/create">Create A New Poll</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</section>
+@if (!empty($poll))
+<section class="junior__gallery__area gallery--2 bg--white p-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12">
+                <div class="section__title text-center">
+                    <h2 class="title__line">Poll For MGSU</h2>
+                    <p>Voting And Win your Favorite Person.........</p>
+                </div>
+            </div>
+        </div>
+        <div class="row galler__wrap mt--40">
+            <div class="col-md-12 mb-0">
+                <div class="">
+                    <h2 class="title__line">{{$poll->question}}</h2>
+                    {{-- <p>Voting And Win your Favorite Person.........</p> --}}
+                </div>
+                <form action="/vote/{{$poll->id}}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="question_id" value="{{$poll->id}}">
+                    <input type="hidden" name="named" value="{{$poll->name}}">
+        </div>
+            <!-- Start Single Gallery -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                <div class="gallery">
+                    <div class="gallery__thumb">
+                        <label>
+                            <input type="radio" name="vote1" value="{{$poll->image1}}" onclick="form.submit()">
+                            <img src="{{$poll->image1}}" alt="poll" class="w-100">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                <div class="gallery">
+                    <div class="gallery__thumb">
+                        <label>
+                            <input type="radio" name="vote2" value="{{$poll->image2}}" onclick="form.submit()">
+                            <img src="{{$poll->image2}}" alt="poll" class="w-100">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            @if (!empty($poll->image3))
+            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                <div class="gallery">
+                    <div class="gallery__thumb">
+                        <label>
+                            <input type="radio" name="vote3" value="{{$poll->image3}}" onclick="form.submit()">
+                            <img src="{{$poll->image3}}" alt="poll" class="w-100">
+                        </label>
+                    </div>
+                </div>
+            </div> 
+            @endif 
+            @if (!empty($poll->image4))
+            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                <div class="gallery">
+                    <div class="gallery__thumb">
+                        <label>
+                            <input type="radio" name="vote4" value="{{$poll->image4}}" onclick="form.submit()">
+                            <img src="{{$poll->image4}}" alt="poll" class="w-100">
+                        </label>
+                    </div>
+                </div>
+            </div>                       <!-- End Single Gallery -->
+        </div>
+        @endif
+        <div class="row">
+            <div class="col-md-12 text-right">
+            <small class="">{{$poll->name}}</small>
+            </div>
+        </div>
+    </form>
+    </div>
+</section>
+
+@endif
+@endsection

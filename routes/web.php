@@ -18,11 +18,21 @@ Route::get('/', function () {
 
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
-
-//chat
-Route::get('/home', 'ChatController@index')->name('home');
-Route::post('/home', 'ChatController@store');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/welcome/{welcome}', 'VoteController@pollvote');
 
 
-Route::get('/converstion', 'ChatController@show'); 
+//poll
+// Route::resource('/poll', 'pollController');
+
+Route::resource('/vote', 'voteController');
+Route::get('/poll', 'PollController@index');
+
+Route::group(['middleware' => ['web','auth']],function(){
+    
+
+Route::get('/poll/create', 'PollController@create');
+Route::post('/poll', 'PollController@store');
+
+
+});
